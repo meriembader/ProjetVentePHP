@@ -1,0 +1,241 @@
+<?php
+ 
+include_once "../Controller/produitC.php";
+include_once "../Model/produit.php";
+
+
+if (isset($_GET['edit'])) {
+    $reference = $_GET['edit'];
+    $update = true;
+    $record = mysqli_query($db, "SELECT * FROM produit WHERE reference=$reference");
+
+    if (count($record) == 1 ) {
+        $n = mysqli_fetch_array($record);
+        $nom = $n['nom'];
+        $quantite_total = $n['quantite_total'];
+        $prix = $n['prix'];
+        $chemin_img = $n['chemin_img'];
+        $description = $n['description'];
+
+
+       
+    }
+}
+/******************************** MEriem ************************** */
+//$produitC=new produitC();
+//$error = "";
+
+
+/* if (
+      isset($_POST["reference"]) && 
+      isset($_POST["nom"]) &&
+      isset($_POST["quantite_total"]) && 
+      isset($_POST["prix"]) && 
+      isset($_POST["chemin_img"])&& isset($_POST["description"])
+  ){
+  if (
+          !empty($_POST["reference"]) && 
+          !empty($_POST["nom"]) && 
+          !empty($_POST["quantite_total"]) && 
+          !empty($_POST["prix"]) && 
+          !empty($_POST["chemin_img"])&& !empty($_POST["description"])
+      ) {
+          $produit= new Produit( $_POST['reference'],$_POST['nom'], $_POST['quantite_total'],$_POST['prix'], $_POST['chemin_img'], $_POST['description']);
+          echo "pppppppppppppppppppppppppppppppppppppppppp";
+          $produitC->modifierproduit($produit, $_GET['reference']);
+          header('Location:list_produits.php');
+      }
+      else
+          $error = "Missing information";
+}
+*/ 
+/****************************************************** MERIEM **********************/
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modifier le  produit</title>
+  <h1>Modification de produit</h1>
+</head>
+  <body>
+      <button><a href="list_produits.php">Retour à la liste des produits</a></button>
+      
+     <div id="error">
+          <?php echo $error; ?>
+      </div>
+      
+      <?php
+          if (isset($_GET['reference'])){
+              $produit = $produitC->recuperer_produit($_GET['reference']);
+              
+      ?>
+      
+      <form action="" method="POST">
+          <table  align="center">
+
+              <tr>
+                 
+                  <td>
+                      <label for="reference">Reference:
+                      </label>
+                  </td>
+                  <td><?php echo $produit['reference'];?> </td>
+              </tr>
+              <tr>
+                  <td>
+                      <label for="nom">Nom:
+                      </label>
+                  </td>
+                  <td><input type="text" name="nom" id="nom" maxlength="20" value ="<?php echo $produit['nom'];?>"></td>
+              </tr>
+              
+              <tr>
+                  <td>
+                      <label for="chemin_img">Image:
+                      </label>
+                  </td>
+                  <td>
+                      <input type="chemin_img" name="chemin_img" id="chemin_img" value ="<?php echo $produit['chemin_img'];?>"  >
+                  </td>
+              </tr>
+              <tr>
+                
+                  <td>
+                      <label for="prix">Prix(en DT):
+                      </label>
+                  </td>
+                   <td>
+                      <input type="prix" name="prix" id="prix" value ="<?php echo $produit['prix'];?>">
+                  </td>
+              </tr>
+                 <tr>
+                
+                  <td>
+                      <label for="quantite_total">Qunatité totale:
+                      </label>
+                  </td>
+                   <td>
+                      <input type="quantite_total" name="quantite_total" id="quantite_total" value ="<?php echo $produit['quantite_total'];?>" >
+                  </td>
+              </tr>
+                 <tr>
+                
+                  <td>
+                      <label for="description">Description:
+                      </label>
+                  </td>
+                   <td>
+                      <input type="text" name="description" id="description" value ="<?php echo $produit['description'];?>" >
+                  </td>
+              </tr>
+                 
+              
+              <tr>
+                  <td></td>
+                  <td>
+                      <input type="submit" value="Modifier"> 
+                  </td>
+                  <td>
+                      <input type="reset" value="Annuler" >
+                  </td>
+              </tr>
+          </table>
+      </form>
+      <?php
+  }
+  ?>
+  </body>
+</html>
+
+
+
+
+/*
+		function afficherproduitseloncategorie($catalogue){
+			$db = config::getConnexion();
+			$sql="SElECT * FROM produit WHERE nomCatalogue=:catalogue";
+			$req=$db->prepare($sql);
+			$req->bindValue(':catalogue',$catalogue);
+			return $liste;
+		}
+		
+		function reccupererproduit($reference){
+			$db = config::getConnexion();
+			$sql="SELECT * from produit where reference=$reference";
+			$liste=$db->query($sql);
+			return $liste;
+		}
+		
+		function supprimerproduit($reference){
+			$sql1="DELETE FROM image where reference= :reference";
+			$sql="DELETE FROM produit where reference= :reference";
+			$db = config::getConnexion();
+			$req1=$db->prepare($sql1);
+	        $req=$db->prepare($sql);
+			$req1->bindValue(':reference',$reference);
+			$req->bindValue(':reference',$reference);
+	        $req1->execute();
+	        $req->execute();
+		}
+		
+    }*/
+    
+    <?php
+            if (isset($_GET['reference'])){
+                $produit = $produitC->recuperer_produit($_GET['reference']);
+                
+        ?>
+    function modifierproduit($produit,$reference){
+        $db = config::getConnexion();
+    
+        if($_POST){
+             
+            try{
+             
+                // write update query
+                // in this case, it seemed like we have so many fields to pass and 
+                // it is better to label them and not use question marks
+                $query = "UPDATE produit SET nom=:nom,prix=:prix, chemin_img=:chemin_img, quantite_total=:quantite_total, description=:description WHERE reference=:reference";
+         
+                // prepare query for excecution
+                $stmt = $con->prepare($query);
+         
+                // posted values
+                $nom=htmlspecialchars(strip_tags($_POST['nom']));
+                $prix=htmlspecialchars(strip_tags($_POST['prix']));
+                $chemin_img=htmlspecialchars(strip_tags($_POST['chemin_img']));
+                $quantite_total=htmlspecialchars(strip_tags($_POST['quantite_total']));
+             
+                $description=htmlspecialchars(strip_tags($_POST['description']));
+               
+                // bind the parameters
+                $stmt->bindParam(':nom',$nom);
+                $stmt->bindParam(':prix',$prix);
+                $stmt->bindParam(':chemin_img',$chemin_img);
+                $stmt->bindParam(':quantite_total',$quantite_total);
+                
+                
+                $stmt->bindParam(':description',$description);
+                $stmt->bindParam(':reference',$reference);
+                 
+                // Execute the query
+                if($stmt->execute()){
+                    echo "<div class='alert alert-success'>Record was updated.</div>";
+                }else{
+                    echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
+                }
+                 
+            }
+             
+            // show errors
+            catch(PDOException $exception){
+                die('ERROR: ' . $exception->getMessage());
+            }
+        }
+    }
+}
