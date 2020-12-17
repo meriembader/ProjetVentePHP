@@ -13,7 +13,7 @@ if($link === false){
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
 $username = $password = $confirm_password = "";
-$username_err = $password_err = $confirm_password_err = "";
+$username_err = $password_err = $confirm_password_err = "";   
  
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
