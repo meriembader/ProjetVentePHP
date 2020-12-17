@@ -4,7 +4,7 @@
     include_once "../Model/produit.php";
 
     function pdo_connect_mysql() {
-        $DATABASE_HOST = 'localhost';
+        $DATABASE_HOST = 'localhost';  
         $DATABASE_USER = 'root';
         $DATABASE_PASS = '';
         $DATABASE_NAME = 'projet';
