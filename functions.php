@@ -10,4 +10,4 @@ function pdo_connect_mysql() {
     	// If there is an error with the connection, stop the script and display the error.
     	exit('Failed to connect to database!');
     }
-}
+}  

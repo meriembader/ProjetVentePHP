@@ -391,9 +391,9 @@ if(isset($_REQUEST["file"])){
     }
 }
 ?>
-<script>
+<script>  
 function sortTable() {
-  var table, rows, switching, i, x, y, shouldSwitch;
+  var table, rows, switching, i, x, y, shouldSwitch;   
   table = document.getElementById("SortTable");
   switching = true;
  
